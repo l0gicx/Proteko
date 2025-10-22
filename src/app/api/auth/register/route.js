@@ -1,9 +1,13 @@
 // app/api/auth/register/route.js
-import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
+// DO NOT import Prisma at the top
 
 export async function POST(request) {
+  // DYNAMIC IMPORT: Import Prisma only when the function is called
+  const { PrismaClient } = await import('@prisma/client');
+  const prisma = new PrismaClient();
+
   try {
     const body = await request.json();
     const { name, email, password } = body;
@@ -26,5 +30,7 @@ export async function POST(request) {
   } catch (error) {
     console.error("REGISTRATION ERROR:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }

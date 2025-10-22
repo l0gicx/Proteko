@@ -1,9 +1,9 @@
 // app/api/auth/register/route.js
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs"; // <--- CHANGE HERE
+import prisma from "@/lib/prisma"; // <-- IMPORT the singleton instance
+import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+// DO NOT create a new PrismaClient here
 
 export async function POST(request) {
   try {

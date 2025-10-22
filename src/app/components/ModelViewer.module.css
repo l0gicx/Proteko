@@ -1,0 +1,10 @@
+/* app/components/ModelViewer.module.css */
+.viewerContainer {
+  width: 80vw;
+  height: 70vh;
+  max-width: 800px;
+  background-color: #222;
+  border-radius: 15px;
+  border: 1px solid #444;
+  margin-top: 2rem;
+}

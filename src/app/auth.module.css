@@ -1,0 +1,131 @@
+/* app/auth.module.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: radial-gradient(circle at center, #34495e, #2c3e50);
+  box-sizing: border-box;
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  border-radius: 15px;
+  
+  /* Glassmorphism Effect */
+  background-color: rgba(236, 240, 241, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(236, 240, 241, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  
+  color: #ecf0f1;
+}
+
+.formWrapper h1 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #fff;
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #bdc3c7;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  position: relative;
+}
+
+.inputIcon {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: #7f8c8d;
+}
+
+.form input {
+  width: 100%;
+  padding: 15px 15px 15px 50px; /* Make space for the icon */
+  font-size: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  background-color: rgba(44, 62, 80, 0.7);
+  color: #ecf0f1;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.form input::placeholder {
+  color: #95a5a6;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.form button {
+  padding: 15px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(45deg, #3498db, #2980b9);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.5);
+}
+
+.form button:disabled {
+  background: #7f8c8d;
+  cursor: not-allowed;
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.error {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.5);
+  padding: 12px;
+  border-radius: 5px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.linkText {
+  margin-top: 25px;
+  text-align: center;
+  color: #bdc3c7;
+}
+
+.linkText a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.linkText a:hover {
+  text-decoration: underline;
+}

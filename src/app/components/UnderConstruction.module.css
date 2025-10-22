@@ -1,0 +1,42 @@
+/* app/components/UnderConstruction.module.css */
+.container {
+  width: 90vw;
+  height: 70vh;
+  max-width: 1400px;
+  margin: 1rem auto;
+  background-color: #333;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.icon {
+  /* Use font-size to make emojis bigger */
+  font-size: 80px; 
+  line-height: 1; /* Ensures proper vertical alignment */
+  /* The spinning animation has been removed */
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Add a subtle shadow to the emoji */
+}
+
+/* The @keyframes spin block is no longer needed and has been removed */
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(255, 193, 7, 0.5); /* Changed shadow to match warning color */
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #bdc3c7;
+  margin: 0;
+  max-width: 400px;
+}

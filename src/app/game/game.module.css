@@ -1,0 +1,7 @@
+/* app/game/game.module.css */
+.gameContainer {
+  width: 100vw;
+  height: 100vh;
+  margin-top: 0; /* Override any global margin */
+  background-color: #111;
+}

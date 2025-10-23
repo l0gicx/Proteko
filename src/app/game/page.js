@@ -1,11 +1,12 @@
 // app/game/page.js
-import UnderConstruction from '../components/UnderConstruction';
+// We don't need a dynamic route for this example yet
+import GameScene from '../components/GameScene';
+import styles from './game.module.css';
 
 export default function GamePage() {
   return (
-    <main>
-      {/* The game components are removed for now, and the placeholder is used instead. */}
-      <UnderConstruction />
-    </main>
+    <div className={styles.gameContainer}>
+      <GameScene />
+    </div>
   );
 }

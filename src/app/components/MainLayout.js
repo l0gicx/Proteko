@@ -4,14 +4,14 @@
 import { usePathname } from 'next/navigation';
 import Header from './Header';
 
-// These are the routes where the main header should NOT be displayed
-const HIDDEN_HEADER_ROUTES = ['/editor'];
+// Add '/game' to this array
+const HIDDEN_HEADER_ROUTES = ['/editor', '/game'];
 
 export default function MainLayout({ children }) {
   const pathname = usePathname();
   
-  // Check if the current route is one of the hidden routes
-  const isHeaderHidden = HIDDEN_HEADER_ROUTES.includes(pathname);
+  // The logic now correctly checks for both routes
+  const isHeaderHidden = HIDDEN_HEADER_ROUTES.some(path => pathname.startsWith(path));
 
   return (
     <>

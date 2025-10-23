@@ -1,0 +1,80 @@
+{
+  "objects": [
+    {
+      "id": 1761245391723,
+      "name": "Big Table",
+      "url": "/models/city/Table Big.glb",
+      "category": "Furniture",
+      "type": "model",
+      "position": [
+        14.955166132409246,
+        0,
+        2.2409619109335503
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        9.167122539925352,
+        9.167122539925352,
+        9.167122539925352
+      ],
+      "isAnchored": false,
+      "canCollide": true
+    },
+    {
+      "id": 1761245413469,
+      "name": "Chair",
+      "url": "/models/city/Chair.glb",
+      "category": "Furniture",
+      "type": "model",
+      "position": [
+        24.69573073491744,
+        0,
+        2.353044676075246
+      ],
+      "rotation": [
+        3.1415926535897922,
+        -1.562077975137716,
+        3.1415926535897922
+      ],
+      "scale": [
+        0.9733932044780942,
+        0.9733932044780942,
+        0.9733932044780942
+      ],
+      "isAnchored": false,
+      "canCollide": true
+    },
+    {
+      "id": 1761245458568,
+      "name": "Chair",
+      "url": "/models/city/Chair.glb",
+      "category": "Furniture",
+      "type": "model",
+      "position": [
+        5.192847294658625,
+        0,
+        2.996199374534992
+      ],
+      "rotation": [
+        -3.141592653589793,
+        1.5418450781686488,
+        -3.141592653589793
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "isAnchored": false,
+      "canCollide": true
+    }
+  ],
+  "groundSize": [
+    100,
+    100
+  ]
+}

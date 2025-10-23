@@ -1,6 +1,11 @@
 // app/data/cityModels.js
 
 export const availableModels = [
+  // === Furniture (NEW) ===
+  { name: 'Small Table', url: '/models/city/Small Table.glb', category: 'Furniture' },
+  { name: 'Chair', url: '/models/city/Chair.glb', category: 'Furniture' },
+  { name: 'Big Table', url: '/models/city/Table Big.glb', category: 'Furniture' },
+
   // === Buildings ===
   { name: 'Big Building', url: '/models/city/Big Building.glb', category: 'Buildings' },
   { name: 'Brown Building', url: '/models/city/Brown Building.glb', category: 'Buildings' },

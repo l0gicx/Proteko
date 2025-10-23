@@ -1,0 +1,177 @@
+/* app/components/Toolbox.module.css */
+.toolbox {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* This is important */
+  background-color: #282c34;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  border-bottom: 1px solid #3c4048;
+  flex-shrink: 0; /* Prevents this from shrinking */
+  color: #abb2bf;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #7f8c8d;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.closeButton:hover {
+  background-color: #3c4048;
+  color: white;
+}
+
+.searchBar {
+  padding: 15px;
+  border-bottom: 1px solid #3c4048;
+  flex-shrink: 0; /* Prevents this from shrinking */
+  background-color: #21252b;
+}
+
+.searchBar input {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: #1e2228;
+  border: 1px solid #3c4048;
+  border-radius: 6px;
+  color: #ecf0f1;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.searchBar input:focus {
+  border-color: #3498db;
+}
+
+.searchBar input::placeholder {
+  color: #5c6370;
+}
+
+/* --- THE FIX IS HERE --- */
+.itemList {
+  flex-grow: 1; /* Allows this element to grow and fill remaining space */
+  overflow-y: auto; /* Adds a scrollbar ONLY when the content is too tall */
+  scrollbar-width: thin;
+  scrollbar-color: #565c64 #21252b;
+}
+
+/* For Chrome, Safari, Edge, and other WebKit browsers */
+.itemList::-webkit-scrollbar {
+  width: 8px; /* Makes the scrollbar slim */
+}
+
+.itemList::-webkit-scrollbar-track {
+  background: #21252b; /* The background of the scrollbar track */
+  border-radius: 10px;
+}
+
+.itemList::-webkit-scrollbar-thumb {
+  background-color: #565c64; /* The color of the draggable scroll handle */
+  border-radius: 10px; /* Rounded corners for the handle */
+  border: 2px solid #21252b; /* Creates a small padding effect */
+}
+
+.itemList::-webkit-scrollbar-thumb:hover {
+  background-color: #7f8c8d; /* Makes the handle slightly brighter on hover */
+}
+
+.category {
+  border-bottom: 1px solid #3c4048;
+}
+
+.categoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 12px 15px;
+  background-color: #282c34;
+  border: none;
+  color: #ecf0f1;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.categoryHeader:hover {
+  background-color: #2c313a;
+}
+
+.arrow {
+  font-size: 0.7rem;
+  color: #7f8c8d;
+  transition: transform 0.2s ease-in-out;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.itemGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px 15px;
+  background-color: #21252b;
+}
+
+.itemCard {
+  background-color: #1e2228;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  border: 1px solid #3c4048;
+}
+
+.itemCard:hover {
+  transform: translateY(-2px);
+  border-color: #3498db;
+}
+
+.previewCanvas {
+  height: 80px;
+  background: radial-gradient(circle at center, #3c4048 0%, #1e2228 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconPreview {
+  width: 32px;
+  height: 32px;
+  color: #e5c07b;
+}
+
+.itemName {
+  padding: 8px;
+  font-size: 0.75rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #282c34;
+  color: #abb2bf;
+  border-top: 1px solid #3c4048;
+}

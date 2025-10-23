@@ -1,0 +1,29 @@
+/* app/components/MainToolbar.module.css */
+.toolbar {
+  display: flex;
+  gap: 5px;
+}
+
+.toolButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #abb2bf;
+  border: 1px solid #3c4048;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toolButton:hover {
+  background-color: #3c4048;
+  color: white;
+}
+
+.toolButton.active {
+  background-color: #3498db;
+  border-color: #2980b9;
+  color: white;
+}

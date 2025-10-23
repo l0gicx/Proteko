@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server/index.js",
     "build": "prisma generate && next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server/index.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -14,10 +14,15 @@
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.6",
     "bcryptjs": "^3.0.2",
+    "lucide-react": "^0.546.0",
     "next": "14.2.3",
     "next-auth": "^5.0.0-beta.29",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-hot-toast": "^2.6.0",
+    "react-resizable-panels": "^3.0.6",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "three": "^0.164.1",
     "zdog": "^1.1.3"
   },

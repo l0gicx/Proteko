@@ -1,150 +1,178 @@
 // app/editor/page.js
 "use client";
-import { useState } from 'react';
-import { availableModels } from '../data/cityModels';
+import { useState, useRef } from 'react'; // <-- Add useRef back
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import EditorScene from '../components/EditorScene';
+import Toolbox from '../components/Toolbox';
+import ModelPreloader from '../components/ModelPreloader';
+import MainToolbar from '../components/MainToolbar';
+import PropertiesPanel from '../components/PropertiesPanel';
+import LightingPanel from '../components/LightingPanel';
+import SoundPanel from '../components/SoundPanel';
+import AnimationPanel from '../components/AnimationPanel';
 import styles from './editor.module.css';
 
-// NEW: A dedicated component for the properties panel
-function PropertiesPanel({ selectedBuilding, onUpdate }) {
-  if (!selectedBuilding) {
-    return null; // Don't render if nothing is selected
-  }
-
-  const handlePropertyChange = (propName, value) => {
-    onUpdate(selectedBuilding.id, { [propName]: value });
-  };
-
-  return (
-    <div className={styles.propertiesPanel}>
-      <h3>Properties</h3>
-      <div className={styles.propertyRow}>
-        <label className={styles.toggle}>
-          <input
-            type="checkbox"
-            checked={selectedBuilding.isAnchored}
-            onChange={(e) => handlePropertyChange('isAnchored', e.target.checked)}
-          />
-          <span className={styles.slider}></span>
-          Is Anchored
-        </label>
-      </div>
-      <div className={styles.propertyRow}>
-        <label className={styles.toggle}>
-          <input
-            type="checkbox"
-            checked={selectedBuilding.canCollide}
-            onChange={(e) => handlePropertyChange('canCollide', e.target.checked)}
-          />
-          <span className={styles.slider}></span>
-          Can Collide
-        </label>
-      </div>
-    </div>
-  );
-}
-
 export default function EditorPage() {
-  const [buildings, setBuildings] = useState([]);
+  const [sceneObjects, setSceneObjects] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [currentModel, setCurrentModel] = useState(null);
+  const [currentObject, setCurrentObject] = useState(null);
   const [groundSize, setGroundSize] = useState([100, 100]);
-  const [showResizeHandles, setShowResizeHandles] = useState(true);
   const [transformMode, setTransformMode] = useState('translate');
+  const [panels, setPanels] = useState({ 
+    toolbox: true, 
+    properties: true,
+    lighting: false,
+    sounds: false,
+    animation: false,
+  });
 
-  const handlePlaceBuilding = (newBuilding) => {
-    // Add the new properties with default values
-    const buildingWithProps = {
-      ...newBuilding,
-      isAnchored: false,
-      canCollide: true,
-    };
-    setBuildings(prev => [...prev, buildingWithProps]);
-  };
+  // Add the ref for the file input back
+  const fileInputRef = useRef(null);
 
-  const handleUpdateBuildingProperties = (id, newProps) => {
-    setBuildings(prev => prev.map(b => b.id === id ? { ...b, ...newProps } : b));
-  };
-
-  const handleSave = () => {
-    const sceneData = { buildings, groundSize };
-    localStorage.setItem('myCityScene', JSON.stringify(sceneData));
-    alert('City saved!');
-  };
-
-  const handleLoad = () => {
-    const savedScene = localStorage.getItem('myCityScene');
-    if (savedScene) {
-      const sceneData = JSON.parse(savedScene);
-      setBuildings(sceneData.buildings || []);
-      setGroundSize(sceneData.groundSize || [100, 100]);
-      alert('City loaded!');
+  const handleTogglePanel = (panelName) => {
+    if (['properties', 'lighting', 'sounds', 'animation'].includes(panelName)) {
+       setPanels(prev => ({
+         ...prev,
+         properties: panelName === 'properties' ? !prev.properties : false,
+         lighting: panelName === 'lighting' ? !prev.lighting : false,
+         sounds: panelName === 'sounds' ? !prev.sounds : false,
+         animation: panelName === 'animation' ? !prev.animation : false,
+         [panelName]: !prev[panelName]
+       }));
     } else {
-      alert('No saved city found.');
+      setPanels(prev => ({ ...prev, [panelName]: !prev[panelName] }));
     }
   };
 
-  const selectedBuildingData = buildings.find(b => b.id === selected);
+  const handlePlaceObject = (newObject) => {
+    let objectWithProps = { ...newObject };
+    if (newObject.type === 'model') {
+      objectWithProps = { ...objectWithProps, isAnchored: false, canCollide: true };
+    }
+    setSceneObjects(prev => [...prev, objectWithProps]);
+  };
+
+  const handleUpdateObject = (id, newProps) => {
+    setSceneObjects(prev => prev.map(obj => obj.id === id ? { ...obj, ...newProps } : obj));
+  };
+
+  // --- ADDED BACK: EXPORT/IMPORT LOGIC ---
+  const handleExport = () => {
+    const sceneData = { objects: sceneObjects, groundSize };
+    const sceneJson = JSON.stringify(sceneData, null, 2);
+    const blob = new Blob([sceneJson], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'proteko-city.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('City exported successfully!');
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const text = e.target.result;
+        const sceneData = JSON.parse(text);
+        if (sceneData.objects && sceneData.groundSize) {
+          setSceneObjects(sceneData.objects);
+          setGroundSize(sceneData.groundSize);
+          alert('City imported successfully!');
+        } else {
+          alert('Invalid city file format.');
+        }
+      } catch (error) {
+        alert('Failed to read or parse the city file.');
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = null;
+  };
+  // --- END OF ADDED LOGIC ---
+
+  const selectedObjectData = sceneObjects.find(obj => obj.id === selected);
+  const isAnyRightPanelOpen = panels.properties || panels.lighting || panels.sounds || panels.animation;
 
   return (
     <div className={styles.editorLayout}>
-      <div className={styles.sidebar}>
-        <div className={styles.sidebarSection}>
-          <h2>Toolbox</h2>
-          <p>Select a model to place on the scene.</p>
-          <div className={styles.modelList}>
-            {availableModels.map(model => (
-              <button key={model.name} className={styles.modelButton} onClick={() => setCurrentModel(model)}>
-                {model.name}
-              </button>
-            ))}
-          </div>
+      <ModelPreloader />
+      
+      <header className={styles.topBar}>
+        <h1>PROTEKO City Editor</h1>
+        <MainToolbar panels={panels} onTogglePanel={handleTogglePanel} />
+        <div className={styles.topBarActions}>
+          {/* ADDED BACK: The Export and Import buttons */}
+          <button onClick={handleExport}>Export</button>
+          <button onClick={handleImportClick}>Import</button>
         </div>
+      </header>
 
-        <PropertiesPanel selectedBuilding={selectedBuildingData} onUpdate={handleUpdateBuildingProperties} />
+      {/* ADDED BACK: The hidden file input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        style={{ display: 'none' }}
+        accept=".json"
+      />
 
-        <div className={styles.sidebarSection}>
-          <h3>Transform Mode</h3>
-          <div className={styles.modeButtons}>
-            <button className={`${styles.modeButton} ${transformMode === 'translate' ? styles.active : ''}`} onClick={() => setTransformMode('translate')}>Move</button>
-            <button className={`${styles.modeButton} ${transformMode === 'rotate' ? styles.active : ''}`} onClick={() => setTransformMode('rotate')}>Rotate</button>
-            <button className={`${styles.modeButton} ${transformMode === 'scale' ? styles.active : ''}`} onClick={() => setTransformMode('scale')}>Scale</button>
-          </div>
-        </div>
-        
-        <div className={styles.sidebarSection}>
-          <h3>Options</h3>
-          <label className={styles.toggle}>
-            <input type="checkbox" checked={showResizeHandles} onChange={(e) => setShowResizeHandles(e.target.checked)} />
-            <span className={styles.slider}></span>
-            Show Resize Handles
-          </label>
-        </div>
-        
-        <div className={styles.sidebarSection}>
-          <h3>Actions</h3>
-          <div className={styles.actions}>
-            <button onClick={handleSave}>Save City</button>
-            <button onClick={handleLoad}>Load City</button>
-          </div>
-        </div>
-        {currentModel && <div className={styles.placingNotice}>Placing: {currentModel.name}</div>}
+      <div className={styles.mainContent}>
+        <PanelGroup direction="horizontal">
+          {panels.toolbox && (
+            <>
+              <Panel defaultSize={20} minSize={15} maxSize={30} className={styles.panel}>
+                <Toolbox onSelectItem={setCurrentObject} onToggle={() => handleTogglePanel('toolbox')} />
+              </Panel>
+              <PanelResizeHandle className={styles.resizeHandle} />
+            </>
+          )}
+          <Panel minSize={30}>
+            <EditorScene
+              sceneObjects={sceneObjects}
+              setSceneObjects={setSceneObjects}
+              selected={selected}
+              setSelected={setSelected}
+              currentObject={currentObject}
+              setCurrentObject={setCurrentObject}
+              onPlaceObject={handlePlaceObject}
+              groundSize={groundSize}
+              setGroundSize={setGroundSize}
+              transformMode={transformMode}
+            />
+          </Panel>
+          
+          {isAnyRightPanelOpen && (
+            <>
+              <PanelResizeHandle className={styles.resizeHandle} />
+              <Panel defaultSize={20} minSize={15} maxSize={30} className={styles.panel}>
+                {panels.properties && (
+                  <PropertiesPanel 
+                    selectedObject={selectedObjectData} 
+                    onUpdate={handleUpdateObject}
+                    onTransformModeChange={setTransformMode}
+                    transformMode={transformMode}
+                    onToggle={() => handleTogglePanel('properties')}
+                  />
+                )}
+                {panels.lighting && <LightingPanel onToggle={() => handleTogglePanel('lighting')} />}
+                {panels.sounds && <SoundPanel onToggle={() => handleTogglePanel('sounds')} />}
+                {panels.animation && <AnimationPanel onToggle={() => handleTogglePanel('animation')} />}
+              </Panel>
+            </>
+          )}
+        </PanelGroup>
       </div>
-      <div className={styles.sceneContainer}>
-        <EditorScene
-          buildings={buildings}
-          setBuildings={setBuildings}
-          selected={selected}
-          setSelected={setSelected}
-          currentModel={currentModel}
-          setCurrentModel={setCurrentModel}
-          onPlaceBuilding={handlePlaceBuilding}
-          groundSize={groundSize}
-          setGroundSize={setGroundSize}
-          showResizeHandles={showResizeHandles}
-          transformMode={transformMode}
-        />
-      </div>
+      {currentObject && <div className={styles.placingNotice}>Placing: {currentObject.name}. Click on the ground to place.</div>}
     </div>
   );
 }
